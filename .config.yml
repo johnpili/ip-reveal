@@ -1,0 +1,6 @@
+http:    
+    port: 8080
+    server_crt: "server.crt"
+    server_key: "server.key"
+extraction:
+    header_key: "X-Real-Ip"

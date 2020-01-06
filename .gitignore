@@ -1,0 +1,32 @@
+# Project
+.project
+.settings
+.vscode
+
+# Executable
+ip-echo
+ip-echo.exe
+
+# mac crap
+.DS_Store
+
+# livereload helper
+gin-bin
+
+# Logs
+logs
+
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+application.pid
+
+# SSL/TLS
+server.crt
+server.key
+
+# JSON Files
+*.json

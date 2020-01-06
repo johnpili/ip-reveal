@@ -9,8 +9,8 @@ import (
 	"os"
 	"strconv"
 
-	"bitbucket.org/johnpili/ip-echo/models"
 	"github.com/go-zoo/bone"
+	"github.com/johnpili/ip-echo/models"
 	"gopkg.in/yaml.v2"
 )
 

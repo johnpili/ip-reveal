@@ -1,0 +1,71 @@
+{{define "title"}}{{.Title}}{{end}}
+{{define "content"}}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 pt-5 pb-2">
+                        <div class="card">
+                            <div class="card-header">
+                                Your IP
+                            </div>
+                            <div class="card-body">
+                                <h1 class="mx-auto">{{.IP}}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 pt-3 pb-5">
+                        <div class="card">
+                            <div class="card-header">
+                                User Agent
+                            </div>
+                            <div class="card-body">
+                                <h4 class="mx-auto">{{.UserAgent}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Google Ads Here -->
+                        <div class="ml-auto mr-auto">GOOGLE ADS</div>
+                    </div>
+                </div>
+                <div class="row">                                        
+                    <div class="col-12 py-5">
+                        <p>IP Echo is a Golang based tool to display your public IP address.<br/>
+                            You can checkout the source at <a href="https://github.com/johnpili/ip-echo" target="_blank">https://github.com/johnpili/ip-echo</a>
+                        </p>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+{{end}}
+{{define "scripts"}}
+<script type="text/javascript">
+    var sharedEvents = new Vue();
+    var app = new Vue({
+        el: "#root",
+        data: {
+            ip: "",
+            userAgent: "",
+        },
+        computed: {
+        },
+        methods:
+        {
+        },
+        beforeMount() {
+            this.ip = "{{.IP}}"
+            this.userAgent = "{{.UserAgent}}"
+        },
+        mounted() {
+        }
+    });
+</script>
+{{end}}

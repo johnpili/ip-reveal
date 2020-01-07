@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -30,6 +31,18 @@ func (z *PageController) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panic(err.Error())
 	}
+}
+
+// JSONHandler ...
+func (z *PageController) JSONHandler(w http.ResponseWriter, r *http.Request) {
+	ipInfo := z.getIPDetails(r)
+	respondWithJSON(w, ipInfo)
+}
+
+// TextHandler ...
+func (z *PageController) TextHandler(w http.ResponseWriter, r *http.Request) {
+	ipInfo := z.getIPDetails(r)
+	respondWithPlainText(w, []byte(ipInfo.IP))
 }
 
 func extractIPAddress(ip string) string {
@@ -62,4 +75,16 @@ func (z *PageController) getIPDetails(r *http.Request) models.IPInfo {
 		UserAgent: r.Header.Get("User-Agent"),
 	}
 	return ipInfo
+}
+
+func respondWithJSON(w http.ResponseWriter, payload interface{}) {
+	response, _ := json.Marshal(payload)
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+	w.WriteHeader(200)
+	w.Write(response)
+}
+
+func respondWithPlainText(w http.ResponseWriter, payload []byte) {
+	w.WriteHeader(200)
+	w.Write(payload)
 }

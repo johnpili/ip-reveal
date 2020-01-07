@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"io/ioutil"
 	"log"
@@ -49,27 +48,11 @@ func main() {
 	router := bone.New()
 	router.Handle("/static/", staticFileServer)
 	router.HandleFunc("/", pageController.IndexHandler)
+	router.HandleFunc("/json", pageController.JSONHandler)
+	router.HandleFunc("/text", pageController.TextHandler)
+	router.HandleFunc("/txt", pageController.TextHandler)
 	log.Fatal(http.ListenAndServe(":"+port, router)) // Start HTTP Server
 }
-
-/*func indexHandler(w http.ResponseWriter, r *http.Request) {
-	//log.Print(r.Header)
-	//log.Print(r.RemoteAddr)
-	ip := ""
-	if len(configuration.Extraction.HeaderKey) > 0 {
-		ip = r.Header.Get(configuration.Extraction.HeaderKey) // Extract IP from header because we are using reverse proxy
-	}
-
-	if len(ip) == 0 { // Fallback
-		ip = extractIPAddress(r.RemoteAddr)
-	}
-
-	ipInfo := models.IPInfo{
-		IP:        ip,
-		UserAgent: r.Header.Get("User-Agent"),
-	}
-	respondWithJSON(w, ipInfo)
-}*/
 
 func loadConfiguration(c string) models.Config {
 	f, err := os.Open(c)
@@ -84,11 +67,4 @@ func loadConfiguration(c string) models.Config {
 		log.Fatal(err.Error())
 	}
 	return configuration
-}
-
-func respondWithJSON(w http.ResponseWriter, payload interface{}) {
-	response, _ := json.Marshal(payload)
-	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
-	w.WriteHeader(200)
-	w.Write(response)
 }

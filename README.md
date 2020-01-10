@@ -1,4 +1,4 @@
-#Develop a whatismyipaddress.com clone website using Golang
+# Develop a whatismyipaddress.com clone website using Golang
 
 Do you want to build a clone website similar to [whatismyipaddress.com](https://whatismyipaddress.com)? It is actually easy to develop. I was working on an automated DNS client that will check my public IP address and I decided to build this tool. Perhaps, somebody might need this as well in the future. I already made the completed tool available online at [ip.johnpili.com](https://ip.johnpili.com)
 It works by reading the HTTP header request which contains information such as IP Address, User-Agent, Scheme, etc. If you are using a reverse proxy like Cloudflare, you can extract IP information from header keys ***Cf-Connecting-Ip*** or ***X-Real-Ip***
@@ -16,13 +16,14 @@ map[
     Connection:[upgrade] 
     Dnt:[1] Pragma:[no-cache] 
     Upgrade-Insecure-Requests:[1] 
-    User-Agent:[Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0] X-Forwarded-For:[193.169.145.66, 193.169.145.66] 
+    User-Agent:[Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0] 
+    X-Forwarded-For:[193.169.145.66, 193.169.145.66] 
     X-Forwarded-Proto:[https] 
     X-Real-Ip:[193.169.145.66]
 ]
 </pre>
 
-###Snippet extracting IP address from header
+### Snippet extracting IP address from header
 <pre>
 func (z *PageController) getIPDetails(r *http.Request) models.IPInfo {
 	ip := ""
@@ -43,5 +44,5 @@ func (z *PageController) getIPDetails(r *http.Request) models.IPInfo {
 </pre>
 You can checkout my blog post about this at [https://johnpili.com](https://johnpili.com/develop-a-whatismyipaddress-com-clone-website-using-golang/)
 
-###Screenshot
+### Screenshot
 ![IP Echo - ip.johnpili.com](https://johnpili.com/wp-content/uploads/2020/01/Screen-Shot-2020-01-10-at-11.27.25-PM.png)

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"io/ioutil"
 	"log"
@@ -9,7 +8,9 @@ import (
 	"os"
 	"strconv"
 
+	rice "github.com/GeertJohan/go.rice"
 	"github.com/go-zoo/bone"
+	"github.com/johnpili/ip-echo/controllers"
 	"github.com/johnpili/ip-echo/models"
 	"gopkg.in/yaml.v2"
 )
@@ -34,43 +35,23 @@ func main() {
 		port = os.Getenv("ASPNETCORE_PORT") // Override port if deployed in IIS
 	}
 
+	viewBox := rice.MustFindBox("views")
+	staticBox := rice.MustFindBox("static")
+
+	pageController := controllers.PageController{
+		ViewBox:       viewBox,
+		Configuration: &configuration,
+	}
+
+	staticFileServer := http.StripPrefix("/static/", http.FileServer(staticBox.HTTPBox()))
+
 	router := bone.New()
-	router.HandleFunc("/", indexHandler)
+	router.Handle("/static/", staticFileServer)
+	router.HandleFunc("/", pageController.IndexHandler)
+	router.HandleFunc("/json", pageController.JSONHandler)
+	router.HandleFunc("/text", pageController.TextHandler)
+	router.HandleFunc("/txt", pageController.TextHandler)
 	log.Fatal(http.ListenAndServe(":"+port, router)) // Start HTTP Server
-}
-
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	//log.Print(r.Header)
-	//log.Print(r.RemoteAddr)
-	ip := ""
-	if len(configuration.Extraction.HeaderKey) > 0 {
-		ip = r.Header.Get(configuration.Extraction.HeaderKey) // Extract IP from header because we are using reverse proxy
-	}
-
-	if len(ip) == 0 { // Fallback
-		ip = extractIPAddress(r.RemoteAddr)
-	}
-
-	ipInfo := models.IPInfo{
-		IP:        ip,
-		UserAgent: r.Header.Get("User-Agent"),
-	}
-	respondWithJSON(w, ipInfo)
-}
-
-func extractIPAddress(ip string) string {
-	if len(ip) > 0 {
-		for i := len(ip); i >= 0; i-- {
-			offset := len(ip)
-			if (i + 1) <= len(ip) {
-				offset = i + 1
-			}
-			if ip[i:offset] == ":" {
-				return ip[:i]
-			}
-		}
-	}
-	return ip
 }
 
 func loadConfiguration(c string) models.Config {
@@ -86,11 +67,4 @@ func loadConfiguration(c string) models.Config {
 		log.Fatal(err.Error())
 	}
 	return configuration
-}
-
-func respondWithJSON(w http.ResponseWriter, payload interface{}) {
-	response, _ := json.Marshal(payload)
-	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
-	w.WriteHeader(200)
-	w.Write(response)
 }

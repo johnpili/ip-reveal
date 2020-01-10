@@ -30,3 +30,5 @@ server.key
 
 # JSON Files
 *.json
+
+.history/

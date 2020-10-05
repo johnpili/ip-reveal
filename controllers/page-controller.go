@@ -74,6 +74,11 @@ func (z *PageController) getIPDetails(r *http.Request) models.IPInfo {
 		IP:        ip,
 		UserAgent: r.Header.Get("User-Agent"),
 	}
+
+	if z.Configuration.Extraction.DebugHeader {
+		log.Print(r.Header)
+	}
+
 	return ipInfo
 }
 

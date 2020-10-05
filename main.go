@@ -2,11 +2,14 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"runtime"
 	"strconv"
+	"time"
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/go-zoo/bone"
@@ -15,7 +18,11 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var configuration models.Config
+// Configurations / Settings
+var (
+	configuration models.Config
+	BuildVersion  = ""
+)
 
 func main() {
 
@@ -26,8 +33,11 @@ func main() {
 	}
 
 	var configLocation string
-	flag.StringVar(&configLocation, "config", ".config.yml", "Set the location of configuration file")
+	flag.StringVar(&configLocation, "config", "config.yml", "Set the location of configuration file")
 	flag.Parse()
+
+	printProductBanner()
+
 	configuration = loadConfiguration(configLocation)
 
 	port := strconv.Itoa(configuration.HTTP.Port)
@@ -51,7 +61,22 @@ func main() {
 	router.HandleFunc("/json", pageController.JSONHandler)
 	router.HandleFunc("/text", pageController.TextHandler)
 	router.HandleFunc("/txt", pageController.TextHandler)
-	log.Fatal(http.ListenAndServe(":"+port, router)) // Start HTTP Server
+	router.HandleFunc("/ip", pageController.TextHandler)
+
+	httpServer := &http.Server{
+		Addr:         ":" + port,
+		Handler:      router,
+		ReadTimeout:  120 * time.Second,
+		WriteTimeout: 120 * time.Second,
+	}
+
+	if configuration.HTTP.IsTLS {
+		log.Printf("Server running at https://localhost:%s/\n", port)
+		log.Fatal(httpServer.ListenAndServeTLS(configuration.HTTP.ServerCert, configuration.HTTP.ServerKey))
+		return
+	}
+	log.Printf("Server running at http://localhost:%s/\n", port)
+	log.Fatal(httpServer.ListenAndServe())
 }
 
 func loadConfiguration(c string) models.Config {
@@ -67,4 +92,16 @@ func loadConfiguration(c string) models.Config {
 		log.Fatal(err.Error())
 	}
 	return configuration
+}
+
+func printProductBanner() {
+	fmt.Println("")
+	fmt.Println("Product: ip.johnpili.com")
+	fmt.Println("Version: 2021.1.0")
+	fmt.Println("Operating System: ", runtime.GOOS)
+	fmt.Println("Architecture: ", runtime.GOARCH)
+	fmt.Println("Build Version: ", BuildVersion)
+	fmt.Println("System Date/Time: ", time.Now().Format("2006-01-02 15:04:05"))
+	fmt.Println("")
+	fmt.Println("")
 }

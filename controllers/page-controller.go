@@ -16,16 +16,25 @@ type PageController struct {
 	Store         *sessions.CookieStore
 	ViewBox       *rice.Box
 	Configuration *models.Config
+	Countries     map[string]string
 }
 
 // IndexHandler ...
 func (z *PageController) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	ipInfo := z.getIPDetails(r)
 	x, err := assembler.AssembleTemplate(z.ViewBox, "base.html", "index.html")
+
+	country, ok := z.Countries[ipInfo.IPCountry]
+	if !ok {
+		country = "Unknown"
+	}
+
 	err = x.Execute(w, map[string]string{
 		"Title":     "IP Echo",
 		"IP":        ipInfo.IP,
 		"UserAgent": ipInfo.UserAgent,
+		"IPCountry": ipInfo.IPCountry,
+		"Country":   country,
 	})
 
 	if err != nil {
@@ -73,6 +82,7 @@ func (z *PageController) getIPDetails(r *http.Request) models.IPInfo {
 	ipInfo := models.IPInfo{
 		IP:        ip,
 		UserAgent: r.Header.Get("User-Agent"),
+		IPCountry: r.Header.Get("CF-IPCountry"),
 	}
 
 	if z.Configuration.Extraction.DebugHeader {

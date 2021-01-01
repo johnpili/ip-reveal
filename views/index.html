@@ -17,13 +17,25 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-12 pt-5 pb-2">
+                        <div class="card">
+                            <div class="card-header">
+                                Country
+                            </div>
+                            <div class="card-body">
+                                <h1 class="mx-auto">{{.Country}}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-12 pt-3 pb-5">
                         <div class="card">
                             <div class="card-header">
                                 User Agent
                             </div>
                             <div class="card-body">
-                                <h4 class="mx-auto">{{.UserAgent}}</h4>
+                                <h4 class="mx-auto">{{.UserAgent}}</h4>                                
                             </div>
                         </div>
                     </div>
@@ -80,6 +92,7 @@
         data: {
             ip: "",
             userAgent: "",
+            ipCountry: "",
         },
         computed: {
         },
@@ -89,6 +102,7 @@
         beforeMount() {
             this.ip = "{{.IP}}"
             this.userAgent = "{{.UserAgent}}"
+            this.ipCountry = "{{.IPCountry}}"
         },
         mounted() {
         }

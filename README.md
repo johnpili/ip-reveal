@@ -1,10 +1,17 @@
-# Develop a whatismyipaddress.com clone website using Golang
+# IP Reveal
 
-Do you want to build a clone website similar to [whatismyipaddress.com](https://whatismyipaddress.com)? It is actually easy to develop. I was working on an automated DNS client that will check my public IP address and I decided to build this tool. Perhaps, somebody might need this as well in the future. I already made the completed tool available online at [ip.johnpili.com](https://ip.johnpili.com)
-It works by reading the HTTP header request which contains information such as IP Address, User-Agent, Scheme, etc. If you are using a reverse proxy like Cloudflare, you can extract IP information from header keys ***Cf-Connecting-Ip*** or ***X-Real-Ip***
-###Sample HTTP header
+Do you want to build a clone website similar to [whatismyipaddress.com](https://whatismyipaddress.com)?
+It is actually easy to develop. I was working on an automated DNS client that will check my public IP address and
+I decided to build this tool. Perhaps, somebody might need this as well in the future. I already made the completed tool
+available online at [ip.johnpili.com](https://ip.johnpili.com)
+It works by reading the HTTP header request which contains information such as IP Address, User-Agent, Scheme, etc.
+If you are using a reverse proxy like Cloudflare, you can extract IP information from header keys ***Cf-Connecting-Ip***
+or ***X-Real-Ip***
+
+## Sample HTTP header
+
 <pre>
-map[
+map [
     Accept:[text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8]
     Accept-Encoding:[gzip] 
     Accept-Language:[en-US,en;q=0.5] 
@@ -23,12 +30,13 @@ map[
 ]
 </pre>
 
-### Snippet extracting IP address from header
+## Snippet extracting IP address from header
+
 <pre>
-func (z *PageController) getIPDetails(r *http.Request) models.IPInfo {
+func getIPDetails(r *http.Request) models.IPInfo {
 	ip := ""
-	if len(z.Configuration.Extraction.HeaderKey) > 0 {
-		ip = r.Header.Get(z.Configuration.Extraction.HeaderKey) // Extract IP from header because we are using reverse proxy example X-Real-Ip
+	if len(configuration.Extraction.HeaderKey) > 0 {
+		ip = r.Header.Get(configuration.Extraction.HeaderKey) // Extract IP from header because we are using reverse proxy example X-Real-Ip
 	}
 
 	if len(ip) == 0 { // Fallback
@@ -38,11 +46,12 @@ func (z *PageController) getIPDetails(r *http.Request) models.IPInfo {
 	ipInfo := models.IPInfo{
 		IP:        ip,
 		UserAgent: r.Header.Get("User-Agent"),
+		IPCountry: r.Header.Get("CF-IPCountry"),
+	}
+
+	if configuration.Extraction.DebugHeader {
+		log.Print(r.Header)
 	}
 	return ipInfo
 }
 </pre>
-You can checkout my blog post about this at [https://johnpili.com](https://johnpili.com/develop-a-whatismyipaddress-com-clone-website-using-golang/)
-
-### Screenshot
-![IP Echo - ip.johnpili.com](https://johnpili.com/wp-content/uploads/2020/01/Screen-Shot-2020-01-10-at-11.27.25-PM.png)

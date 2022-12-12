@@ -5,8 +5,8 @@
 .idea
 
 # Executable
-ip-echo
-ip-echo.exe
+ip-reveal
+ip-reveal.exe
 
 # mac crap
 .DS_Store

@@ -11,7 +11,7 @@
                                 Your IP
                             </div>
                             <div class="card-body">
-                                <h1 class="mx-auto">{{.IP}}</h1>
+                                <h1 class="mx-auto">{{.Data.IP}}</h1>
                             </div>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
                                 Country
                             </div>
                             <div class="card-body">
-                                <h1 class="mx-auto">{{.Country}}</h1>
+                                <h1 class="mx-auto">{{.Data.Country}}</h1>
                             </div>
                         </div>
                     </div>
@@ -35,19 +35,9 @@
                                 User Agent
                             </div>
                             <div class="card-body">
-                                <h4 class="mx-auto">{{.UserAgent}}</h4>                                
+                                <h4 class="mx-auto">{{.Data.UserAgent}}</h4>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <!-- Google Ads Here -->                                               
-                        <!--<ins class="adsbygoogle" style="display:block" 
-                            data-ad-client="ca-pub-7936677155683743" 
-                            data-ad-slot="3383660675"
-                            data-ad-format="auto"
-                            data-full-width-responsive="true"></ins>-->
                     </div>
                 </div>
                 <div class="row">
@@ -56,21 +46,21 @@
                             <div class="card-body">
                                 <h5>About this tool</h5>
                                 <p>
-                                    IP Echo is a Golang based tool for displaying your public IP address.<br />
+                                    IP Reveal is a Golang based tool for displaying your public IP address.<br/>
                                 </p>
                                 <h5>How to use</h5>
                                 <p>
-                                    <ul>
-                                        <li>Using web browser - go to https://ip.johnpili.com. You are looking at it
-                                            right now</li>
-                                        <li>Curl with JSON result - <code>curl https://ip.johnpili.com/json</code></li>
-                                        <li>Curl with IP only text result - <code>curl https://ip.johnpili.com/ip</code>
-                                        </li>
-                                    </ul>
+                                <ul>
+                                    <li>Using web browser - go to https://ip.johnpili.com. You are looking at it
+                                        right now
+                                    </li>
+                                    <li>Curl with JSON result - <code>curl https://ip.johnpili.com/json</code></li>
+                                    <li>Curl with IP only text result - <code>curl https://ip.johnpili.com/ip</code>
+                                    </li>
+                                </ul>
                                 </p>
                                 <p>
-                                    You can checkout the source at <a href="https://github.com/johnpili/ip-echo"
-                                        target="_blank">https://github.com/johnpili/ip-echo</a>
+                                    Source at <a href="https://github.com/johnpili/ip-reveal" target="_blank">https://github.com/johnpili/ip-reveal</a>
                                 </p>
                             </div>
                         </div>
@@ -82,30 +72,4 @@
 </div>
 {{end}}
 {{define "scripts"}}
-<!--<script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-</script>-->
-<script type="text/javascript">
-    var sharedEvents = new Vue();
-    var app = new Vue({
-        el: "#root",
-        data: {
-            ip: "",
-            userAgent: "",
-            ipCountry: "",
-        },
-        computed: {
-        },
-        methods:
-        {
-        },
-        beforeMount() {
-            this.ip = "{{.IP}}"
-            this.userAgent = "{{.UserAgent}}"
-            this.ipCountry = "{{.IPCountry}}"
-        },
-        mounted() {
-        }
-    });
-</script>
 {{end}}

@@ -1,10 +1,8 @@
-module github.com/johnpili/ip-echo
+module github.com/johnpili/ip-reveal
 
-go 1.15
+go 1.19
 
 require (
-	github.com/GeertJohan/go.rice v1.0.0
-	github.com/go-zoo/bone v1.3.0
-	github.com/gorilla/sessions v1.2.1
+	github.com/julienschmidt/httprouter v1.3.0
 	gopkg.in/yaml.v2 v2.3.0
 )
